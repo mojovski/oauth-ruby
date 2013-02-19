@@ -29,9 +29,15 @@ module OAuth::RequestProxy
 
   protected
 
-    def query_params
-      request.GET
-    end
+	def query_params
+		res={}
+		#puts "query params: #{request.GET.inspect}"
+      		request.GET.each{|k,v| res.merge!({k.to_s=>URI.unescape(v)})}
+      		#puts "return res: #{res.inspect}"
+      		return res
+      		#request.GET
+    	end
+
 
     def request_params
       if request.content_type and request.content_type.to_s.downcase.start_with?("application/x-www-form-urlencoded")
