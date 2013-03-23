@@ -32,11 +32,14 @@ module OAuth::RequestProxy
 	def query_params
 		res={}
 		#puts "query params: #{request.GET.inspect}"
-      		request.GET.each{|k,v| res.merge!({k.to_s=>URI.unescape(v)})}
-      		#puts "return res: #{res.inspect}"
-      		return res
-      		#request.GET
-    	end
+  	begin
+      request.GET.each{|k,v| res.merge!({k.to_s=>URI.unescape(v)})}
+      return res
+    rescue #Exception=>e
+      #this happes, if the prameters are a nested hash!
+      return request.GET
+    end
+  end
 
 
     def request_params
